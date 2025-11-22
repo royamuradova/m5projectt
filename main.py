@@ -1,38 +1,43 @@
-# main_expression_tree.py
-# If this is a separate Replit project, rename this file to main.py
+# main_triage.py
+# If this project is separate, rename this file to main.py
 
-from binary_expression_tree import BinaryExpressionTree
+from triage_system import HospitalTriageSystem
 
 
 def main():
-    # Same test set as in the project instructions / previous module
-    postfix_expressions = [
-        "5 3 +",
-        "8 2 - 3 +",
-        "5 3 8 * +",
-        "6 2 / 3 +",
-        "5 8 + 3 -",
-        "5 3 + 8 *",
-        "8 2 3 * + 6 -",
-        "5 3 8 * + 2 /",
-        "8 2 + 3 6 * -",
-        "5 3 + 8 2 / -",
+    triage = HospitalTriageSystem()
+
+    print("----- Hospital Triage System Demo -----\n")
+
+    # Example set of patients: (name, severity)
+    sample_patients = [
+        ("Alice", 2),
+        ("Bob", 4),
+        ("Carlos", 1),
+        ("Diana", 3),
+        ("Evan", 2),
+        ("Fatima", 1),
     ]
 
-    print("----- Binary Expression Tree -----\n")
+    # Add patients
+    for name, severity in sample_patients:
+        print(f"Adding patient {name} with severity {severity}")
+        triage.add_patient(name, severity)
 
-    for expr in postfix_expressions:
-        tree = BinaryExpressionTree()
-        tree.build_from_postfix(expr)
+    print("\n" + str(triage) + "\n")
 
-        infix = tree.infix_traversal()
-        postfix = tree.postfix_traversal()
-        result = tree.evaluate_tree()
+    # Process patients in the correct order
+    print("Processing patients in priority order:\n")
+    while not triage.is_empty():
+        patient = triage.process_next()
+        print(
+            f"Now treating: {patient.name} "
+            f"(severity {patient.severity}, arrival #{patient.arrival_order})"
+        )
 
-        print(f"Postfix Input:      {expr}")
-        print(f"Infix Expression:   {infix}")
-        print(f"Postfix Expression: {postfix}")
-        print(f"Evaluated Result:   {result}\n")
+    # Peek at empty queue to show it handles gracefully
+    print("\nTrying to peek on empty queue:", triage.peek_next())
+    print("\nAll patients have been treated.")
 
 
 if __name__ == "__main__":
